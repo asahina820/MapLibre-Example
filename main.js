@@ -22,6 +22,7 @@ map.on('load', function () {
         'paint': {
             'line-color': '#0067c0',
             'line-width': 5
-        }
+        },
+        'filter': ['==', 'N07_002', '神奈川中央交通（株）']
     });
 });
