@@ -1,46 +1,27 @@
 var map =  new maplibregl.Map({
     container: 'map',
     style: 'https://tile.openstreetmap.jp/styles/osm-bright-ja/style.json', // 地図のスタイル
-    center: [139.7779244, 35.7122128], // 中心座標
-    zoom: 15, // ズームレベル
+    center: [139.6226196,35.4660694], // 中心座標
+    zoom: 14, // ズームレベル
     pitch: 0 // 傾き
 })
 
 map.on('load', function () {
-    map.loadImage(
-        './data/icon.png',
-        function (error, image) {
-            if (error) throw error;
-            map.addImage('facility_icon', image);
-        }
-    );
-    map.addSource('facility_point', {
+    map.addSource('kanagawa_bus', {
         type: 'geojson',
-        data: './data/tokyo_facility.geojson'
+        data: './data/kanagawa_bus.geojson'
     });
     map.addLayer({
-        'id': 'facility_point',
-        'type': 'symbol',
-        'source': 'facility_point',
+        'id': 'kanagawa_bus',
+        'type': 'line',
+        'source': 'kanagawa_bus',
         'layout': {
-            'icon-image': 'facility_icon',
-            'icon-size': 0.1
+            'line-join': 'round',
+            'line-cap': 'round'
+        },
+        'paint': {
+            'line-color': '#0067c0',
+            'line-width': 5
         }
-    });
-    map.on('click', 'facility_point', function (e) {
-        var coordinates = e.features[0].geometry.coordinates.slice();
-        var name = e.features[0].properties.P27_005;
-    
-        while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-            coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
-        }
-        // ポップアップを表示する
-        new maplibregl.Popup({
-            offset: 10, // ポップアップの位置
-            closeButton: false, // 閉じるボタンの表示
-        })
-        .setLngLat(coordinates)
-        .setHTML(name)
-        .addTo(map);
     });
 });
