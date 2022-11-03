@@ -1,28 +1,24 @@
 var map =  new maplibregl.Map({
     container: 'map',
     style: 'https://tile.openstreetmap.jp/styles/osm-bright-ja/style.json', // 地図のスタイル
-    center: [139.6226196,35.4660694], // 中心座標
-    zoom: 14, // ズームレベル
+    center: [140.01162, 35.72270], // 中心座標
+    zoom: 12, // ズームレベル
     pitch: 0 // 傾き
 })
 
 map.on('load', function () {
-    map.addSource('kanagawa_bus', {
+    map.addSource('funabashi_fudepolygon', {
         type: 'geojson',
-        data: './data/kanagawa_bus.geojson'
+        data: './data/funabashi_fudepolygon.geojson'
     });
     map.addLayer({
-        'id': 'kanagawa_bus',
-        'type': 'line',
-        'source': 'kanagawa_bus',
-        'layout': {
-            'line-join': 'round',
-            'line-cap': 'round'
-        },
+        'id': 'funabashi_fudepolygon_fill',
+        'type': 'fill',
+        'source': 'funabashi_fudepolygon',
+        'layout': {},
         'paint': {
-            'line-color': '#0067c0',
-            'line-width': 5
-        },
-        'filter': ['==', 'N07_002', '神奈川中央交通（株）']
+            'fill-color': '#84C98B',
+            'fill-opacity': 0.8
+        }
     });
 });
