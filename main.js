@@ -21,4 +21,14 @@ map.on('load', function () {
             'fill-opacity': 0.8
         }
     });
+    map.addLayer({
+        'id': 'funabashi_fudepolygon_border',
+        'type': 'line',
+        'source': 'funabashi_fudepolygon',
+        'layout': {},
+        'paint': {
+            'line-color': '#2B6442',
+            'line-width': 1
+        }
+    });
 });
