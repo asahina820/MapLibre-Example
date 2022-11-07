@@ -8,22 +8,3 @@ body {
     bottom: 0;
     width: 100%;
 }
-
-#fly {
-    display: block;
-    position: relative;
-    margin: 30px auto;
-    width: 15%;
-    height: 50px;
-    padding: 10px;
-    border: none;
-    border-radius: 50px;
-    font-size: 20px;
-    text-align: center;
-    color: #fff;
-    background: #0067c0;
-    cursor: pointer;
-}
-#fly:hover {
-    transform: scale(1.1, 1.1);
-}
