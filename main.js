@@ -36,6 +36,7 @@ map.on('load', function () {
     map.addSource('red_station', {
         type: 'geojson',
         data: './data/red_station.geojson',
+        attribution: '国土数値情報（鉄道データ）',
     });
     map.addLayer({
         id: 'red_station',
