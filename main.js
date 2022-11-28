@@ -1,74 +1,47 @@
+const style = {
+    version: 8,
+    sources: {
+        rtile: {
+            type: 'raster',
+            tiles: ['https://cyberjapandata.gsi.go.jp/xyz/std/{z}/{x}/{y}.png'],
+            tileSize: 256,
+            attribution: "地図の出典：<a href='https://www.gsi.go.jp/' target='_blank'>地理院タイル</a>",
+        },
+        plateau: {
+            type: 'vector',
+            tiles: ['https://indigo-lab.github.io/plateau-tokyo23ku-building-mvt-2020/{z}/{x}/{y}.pbf'],
+            minzoom: 10,
+            maxzoom: 16,
+            attribution:
+                "データの出典：<a href='https://github.com/indigo-lab/plateau-tokyo23ku-building-mvt-2020'>plateau-tokyo23ku-building-mvt-2020 by indigo-lab</a> (<a href='https://www.mlit.go.jp/plateau/'>国土交通省 Project PLATEAU</a> のデータを加工して作成)",
+        },
+    },
+    layers: [
+        {
+            id: 'rtile',
+            type: 'raster',
+            source: 'rtile',
+            minzoom: 5,
+            maxzoom: 20,
+        },
+        {
+            id: 'bldg',
+            type: 'fill-extrusion',
+            source: 'plateau',
+            'source-layer': 'bldg',
+            minzoom: 10,
+            maxzoom: 20,
+            paint: {
+                'fill-extrusion-color': '#797979',
+                'fill-extrusion-height': ['get', 'measuredHeight'],
+            },
+        },
+    ],
+};
 var map = new maplibregl.Map({
     container: 'map',
-    style: 'https://tile.openstreetmap.jp/styles/osm-bright-ja/style.json', // 地図のスタイル
-    center: [139.74019, 35.6642], // 中心座標
+    style: style, // 地図のスタイル
+    center: [139.745461, 35.65856], // 中心座標
     zoom: 14, // ズームレベル
-    pitch: 0, // 傾き
-});
-
-var size = 200;
-
-// アイコンのアニメージョンの設定
-var pulsingDot = {
-    width: size,
-    height: size,
-    data: new Uint8Array(size * size * 4),
-
-    onAdd: function () {
-        var canvas = document.createElement('canvas');
-        canvas.width = this.width;
-        canvas.height = this.height;
-        this.context = canvas.getContext('2d');
-    },
-
-    render: function () {
-        var duration = 1000;
-        var t = (performance.now() % duration) / duration;
-
-        var radius = (size / 2) * 0.3;
-        var outerRadius = (size / 2) * 0.7 * t + radius;
-        var context = this.context;
-
-        context.clearRect(0, 0, this.width, this.height);
-        context.beginPath();
-        context.arc(this.width / 2, this.height / 2, outerRadius, 0, Math.PI * 2);
-        context.fillStyle = 'rgba(255, 200, 200,' + (1 - t) + ')';
-        context.fill();
-
-        context.beginPath();
-        context.arc(this.width / 2, this.height / 2, radius, 0, Math.PI * 2);
-        context.fillStyle = 'rgba(255, 100, 100, 1)';
-        context.strokeStyle = 'white';
-        context.lineWidth = 2 + 4 * (1 - t);
-        context.fill();
-        context.stroke();
-
-        this.data = context.getImageData(0, 0, this.width, this.height).data;
-
-        map.triggerRepaint();
-
-        return true;
-    },
-};
-
-map.on('load', function () {
-    map.addImage('pulsing-dot', pulsingDot, { pixelRatio: 2 });
-    map.addSource('red_station', {
-        type: 'geojson',
-        data: './data/red_station.geojson',
-        attribution: '国土数値情報（鉄道データ）',
-    });
-    map.addLayer({
-        id: 'red_station',
-        type: 'symbol',
-        source: 'red_station',
-        layout: {
-            'icon-image': 'pulsing-dot',
-            'icon-size': 0.7,
-            'text-field': ['get', 'station'],
-            'text-font': ['Open Sans Semibold', 'Arial Unicode MS Bold'],
-            'text-offset': [0, 1.2],
-            'text-anchor': 'top',
-        },
-    });
+    pitch: 45, // 傾き
 });
